@@ -1,26 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import TodoListTemplate from './components/TodoListTemplate';
+import Form from './components/Form';
+import TodoItemList from './components/TodoItemList';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  id = 0
+  TODOS = 'todos'
+  state = {
+    input: '',
+    todos: []
+  }
+  handleChange = (e) => {
+    const value = e.target.value
+    this.setState({
+      input: value
+    })
+  }
+  handleSubmit = (e) => {
+    e.preventDefault()
+    const {todos, input} = this.state
+    this.setState({
+      input: '',
+      todos: todos.concat({id: this.id++, text: input, checked: false})
+    })
+    localStorage.setItem(this.TODOS, JSON.stringify(todos))
+  }
+  render() {
+    const {input} = this.state
+    return (
+      <TodoListTemplate form={<Form 
+      value={input} 
+      onChange={this.handleChange} 
+      onSubmit={this.handleSubmit}/>}>
+        <TodoItemList />
+      </TodoListTemplate>
+    )
+  }
 }
 
 export default App;
