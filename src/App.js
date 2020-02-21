@@ -22,8 +22,7 @@ class App extends Component {
     return getTodos
   }
   handleChange = (e) => {
-    const value = e.target.value
-    this.setState({ input: value })
+    this.setState({ input: e.target.value })
   }
   handleSubmit = (e) => {
     e.preventDefault()
