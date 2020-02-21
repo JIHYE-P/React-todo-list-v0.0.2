@@ -8,9 +8,9 @@ class TodoItem extends Component {
         <div className="remove" onClick={(e) => {
           e.stopPropagation()
           onRemove(id)
-        }}>✖</div>
+        }}>❌</div>
         <div className={`todo-item ${checked && 'checked'}`}>{text}</div>
-        {checked && (<div className="checked">✔</div>)}
+        {checked && (<div className="checked">✅</div>)}
       </div>
     )
   }

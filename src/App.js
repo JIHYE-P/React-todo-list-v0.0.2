@@ -4,17 +4,26 @@ import Form from './components/Form';
 import TodoItemList from './components/TodoItemList';
 
 class App extends Component {
-  id = 0
-  TODOS = 'todos'
+  id = String(Date.now())
+  MY_TASKS = 'My Tasks'
   state = {
     input: '',
     todos: []
   }
+  componentDidMount() {
+    const todos = this.getLocalStorage()
+    this.setState({todos: todos})
+  }
+  setLocalStorage = (todos) => {
+    localStorage.setItem(this.MY_TASKS, JSON.stringify(todos))
+  }
+  getLocalStorage = () => {
+    const getTodos = JSON.parse(localStorage.getItem(this.MY_TASKS)) || []
+    return getTodos
+  }
   handleChange = (e) => {
     const value = e.target.value
-    this.setState({
-      input: value
-    })
+    this.setState({ input: value })
   }
   handleSubmit = (e) => {
     e.preventDefault()
@@ -23,16 +32,35 @@ class App extends Component {
       input: '',
       todos: todos.concat({id: this.id++, text: input, checked: false})
     })
-    localStorage.setItem(this.TODOS, JSON.stringify(todos))
+    this.setLocalStorage(todos)
+  }  
+  handleToggle = (id) => {
+    const {todos} = this.state
+    const index = todos.findIndex(todo => todo.id === id)
+    const selected = todos[index]
+    const restTodos = [...todos]
+
+    restTodos[index] = {
+      ...selected,
+      checked: !selected.checked
+    }
+    this.setState({ todos: restTodos })
+    this.setLocalStorage(restTodos)
+  }
+  handleRemove = (id) => {
+    const {todos} = this.state
+    const filterTodos = todos.filter(todo => todo.id !== id)
+    this.setState({ todos: filterTodos })
+    this.setLocalStorage(filterTodos)
   }
   render() {
-    const {input} = this.state
+    const {input, todos} = this.state
     return (
       <TodoListTemplate form={<Form 
       value={input} 
       onChange={this.handleChange} 
       onSubmit={this.handleSubmit}/>}>
-        <TodoItemList />
+        <TodoItemList todos={todos} onToggle={this.handleToggle} onRemove={this.handleRemove} />
       </TodoListTemplate>
     )
   }
