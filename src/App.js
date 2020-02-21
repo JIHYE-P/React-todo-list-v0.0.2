@@ -14,6 +14,11 @@ class App extends Component {
     const todos = this.getLocalStorage()
     this.setState({todos: todos})
   }
+  componentDidUpdate(prevProps, prevState) {
+    if(this.state.todos !== prevState.todos) {
+      this.setLocalStorage(this.state.todos)
+    }
+  }
   setLocalStorage = (todos) => {
     localStorage.setItem(this.MY_TASKS, JSON.stringify(todos))
   }
