@@ -9,6 +9,9 @@ const TodoTmplateStyled = styled.section`
   background: #fff;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
   border-radius: 15px;
+  @media only screen and (max-width: 600px) {
+    width: 90%;
+  }
   h1 {
     margin: 20px 0;
     font-family: 'Do Hyeon';
